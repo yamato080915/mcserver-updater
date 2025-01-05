@@ -1,22 +1,30 @@
 import sys, requests, json
 arg = sys.argv[1:]
-
+#---------------------------------------------------
+supportedSoftware = ["purpur", "paper"]
+#---------------------------------------------------
 with open(f"{arg[0]}.json", "r", encoding="utf-8") as f:
     data = json.load(f)
+    software = data["software"]
+    ver = data["mcversion"]
+
+if not software in supportedSoftware:sys.exit()
 
 def get(url, header=None):
     return json.loads(requests.get(url=url, headers=header).text)
 
-url ={"purpur": "https://api.purpurmc.org/v2/purpur"}
+url ={"purpur": "https://api.purpurmc.org/v2/purpur", "paper": "https://api.papermc.io/v2/projects/paper"}
 
 def update():
     global data
-    latest = get(f"{url[data["software"]]}/{data["mcversion"]}")["builds"]["latest"]
+    latest = get(f"{url[software]}{"/versions" if software=="paper" else ""}/{ver}")["builds"]
+    if software == "paper":latest = latest[-1]
+    else:latest = latest["latest"]
     if data["build"] == latest:
         print("running the latest version")
     else:
         print("downloading the latest version")
-        latData = requests.get(f"{url[data["software"]]}/{data["mcversion"]}/{latest}/download").content
+        latData = requests.get(f"{url[software]}{"/versions" if software=="paper" else ""}/{ver}{"/builds" if software=="paper" else ""}/{latest}/download{f"s/paper-{ver}-{latest}.jar" if software=="paper" else ""}").content
         with open(arg[0], "wb") as f:
             f.write(latData)
         data["build"] = latest
@@ -24,10 +32,7 @@ def update():
             json.dump(data, f, indent=4)
         print("updated to the latest version")
 
-if data["mcversion"] in get(url[data["software"]])["versions"]:
-    if data["build"] in get(f"{url[data["software"]]}/{data["mcversion"]}")["builds"]["all"]:
-        update()
-    else:
-        sys.exit()
+if ver in get(url[software])["versions"]:
+    update()
 else:
     sys.exit()
