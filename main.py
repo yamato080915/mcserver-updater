@@ -10,14 +10,19 @@ def get(url, header=None):
 url ={"purpur": "https://api.purpurmc.org/v2/purpur"}
 
 def update():
+    global data
     latest = get(f"{url[data["software"]]}/{data["mcversion"]}")["builds"]["latest"]
     if data["build"] == latest:
-        print("running latest version")
+        print("running the latest version")
     else:
-        print("downloading latest version")
+        print("downloading the latest version")
         latData = requests.get(f"{url[data["software"]]}/{data["mcversion"]}/{latest}/download").content
-        with open("./aho.zip", "wb") as f:
+        with open(arg[0], "wb") as f:
             f.write(latData)
+        data["build"] = latest
+        with open(f"{arg[0]}.json", "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+        print("updated to the latest version")
 
 if data["mcversion"] in get(url[data["software"]])["versions"]:
     if data["build"] in get(f"{url[data["software"]]}/{data["mcversion"]}")["builds"]["all"]:
