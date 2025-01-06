@@ -1,9 +1,16 @@
-import sys, requests, json # type: ignore
+import sys, requests, json, os
+
 arg = sys.argv[1:]
 if arg == []:sys.exit()
+
+jarFile = arg[0]
 configFile = f"{arg[0]}.json"
-if len(arg) <= 2:
+
+if len(arg) >= 2:
     configFile = arg[1]
+elif arg[0][-5:] == ".json":
+    configFile = os.path.abspath(arg[0])
+    os.chdir(os.path.dirname(configFile))
 #---------------------------------------------------
 supportedSoftware = ["purpur", "paper", "velocity"]
 #---------------------------------------------------
@@ -13,6 +20,8 @@ with open(configFile, "r", encoding="utf-8") as f:
     data = json.load(f)
     software = data["software"]
     ver = data["version"]
+    if arg[0][-5:]==".json" and len(arg)==1:
+        jarFile = data["file"]
 
 if not software in supportedSoftware:sys.exit()
 
@@ -35,7 +44,7 @@ def update():
     else:
         print("downloading the latest version")
         latData = requests.get(f"{url[software]}{"" if software=="purpur" else "/versions"}/{ver}{"" if software=="purpur" else "/builds"}/{latest}/download{"" if software=="purpur" else f"s/{software}-{ver}-{latest}.jar"}").content
-        with open(arg[0], "wb") as f:
+        with open(jarFile, "wb") as f:
             f.write(latData)
         data["build"] = latest
         with open(configFile, "w", encoding="utf-8") as f:
