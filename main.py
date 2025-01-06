@@ -1,11 +1,15 @@
-import sys, requests, json
+import sys, requests, json # type: ignore
 arg = sys.argv[1:]
+if arg == []:sys.exit()
+configFile = f"{arg[0]}.json"
+if len(arg) <= 2:
+    configFile = arg[1]
 #---------------------------------------------------
 supportedSoftware = ["purpur", "paper", "velocity"]
 #---------------------------------------------------
 proxy = ["velocity"]
 
-with open(f"{arg[0]}.json", "r", encoding="utf-8") as f:
+with open(configFile, "r", encoding="utf-8") as f:
     data = json.load(f)
     software = data["software"]
     ver = data["version"]
@@ -34,9 +38,10 @@ def update():
         with open(arg[0], "wb") as f:
             f.write(latData)
         data["build"] = latest
-        with open(f"{arg[0]}.json", "w", encoding="utf-8") as f:
+        with open(configFile, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
         print("updated to the latest version")
+
 if software in proxy:
     ver = get(url[software])["versions"][-1]
     data["version"] = ver
