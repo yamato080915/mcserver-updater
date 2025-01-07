@@ -1,7 +1,7 @@
 import sys, requests, json, os
 
 arg = sys.argv[1:]
-if arg == []:sys.exit()
+if arg == []:sys.exit("arg error")
 
 jarFile = arg[0]
 configFile = f"{arg[0]}.json"
@@ -22,8 +22,10 @@ with open(configFile, "r", encoding="utf-8") as f:
     ver = data["version"]
     if arg[0][-5:]==".json" and len(arg)==1:
         jarFile = data["file"]
+    if not software in proxy:
+        versionUp = data["version-up"]
 
-if not software in supportedSoftware:sys.exit()
+if not software in supportedSoftware:sys.exit(f"{software} is not supported")
 
 def get(url, header=None):
     return json.loads(requests.get(url=url, headers=header).text)
@@ -51,10 +53,10 @@ def update():
             json.dump(data, f, indent=4)
         print("updated to the latest version")
 
-if software in proxy:
+if software in proxy or versionUp:
     ver = get(url[software])["versions"][-1]
     data["version"] = ver
 if ver in get(url[software])["versions"]:
     update()
 else:
-    sys.exit()
+    sys.exit(f"ver:{ver} does not exist")
