@@ -11,7 +11,6 @@ apiから最新のビルドを取得してjsonファイルと照合します。
 
 ## 新しいサーバーを建てる場合
 サーバーを建てる場合、ブラウザからサーバーファイルをダウンロードせずとも、jsonファイルを次のように作成することで最新のビルドのサーバーファイルをダウンロードします。\
-batファイルを例のように作成して実行すると、サーバー起動前に更新を確認して、サーバーを起動します。
 _sample.json_
 ```
 {
@@ -22,12 +21,13 @@ _sample.json_
   "version-up": false(常に最新のバージョンで実行したい場合、trueに設定してください。)
 }
 ```
+batファイルを例のように作成して実行すると、サーバー起動前に更新を確認して、サーバーを起動します。\
 _sample.cmd_
 ```
 @echo off
 py main.py sample.json
 IF %ERRORLEVEL% == 0 (
-    java -Xmx4G -Xms4G -jar paper1165.jar
+    java -Xmx4G -Xms4G -jar server.jar
     pause
 ) ELSE (
     echo %ERRORLEVEL%
