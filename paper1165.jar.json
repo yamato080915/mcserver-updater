@@ -2,5 +2,6 @@
     "file": "./paper1165.jar",
     "software": "paper",
     "version": "1.16.5",
-    "build": 794
+    "build": 794, 
+    "version-up": false
 }
