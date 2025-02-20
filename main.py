@@ -38,14 +38,14 @@ url ={
 
 def update():
     global data
-    latest = get(f"{url[software]}{"" if software=="purpur" else "/versions"}/{ver}")["builds"]
+    latest = get(f'{url[software]}{"" if software=="purpur" else "/versions"}/{ver}')["builds"]
     if software == "purpur":latest = latest["latest"]
     else:latest = latest[-1]
     if data["build"] == latest:
         print("running the latest version")
     else:
         print("downloading the latest version")
-        latData = requests.get(f"{url[software]}{"" if software=="purpur" else "/versions"}/{ver}{"" if software=="purpur" else "/builds"}/{latest}/download{"" if software=="purpur" else f"s/{software}-{ver}-{latest}.jar"}").content
+        latData = requests.get(f'{url[software]}{"" if software=="purpur" else "/versions"}/{ver}{"" if software=="purpur" else "/builds"}/{latest}/download{"" if software=="purpur" else f"s/{software}-{ver}-{latest}.jar"}').content
         with open(jarFile, "wb") as f:
             f.write(latData)
         data["build"] = latest
