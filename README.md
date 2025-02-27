@@ -11,7 +11,7 @@ apiから最新のビルドを取得してjsonファイルと照合します。
 
 ## 新しいサーバーを建てる場合
 ### Minecraft Server Builderを使用する(推奨)
-[mcserver builder](https://github.com/yamato080915/mcserver-builder)はmcserver updaterを使用してプロキシ・purpurサーバーを構築し、プロキシサーバーのための設定を自動で行います。\
+[mcserver builder](https://github.com/yamato080915/mcserver-builder)はmcserver updaterを使用してプロキシ・purpurサーバー・paperサーバーを構築し、プロキシサーバーのための設定を自動で行います。\
 また、適切なバージョンのjdkを自動で選択してバッチファイルを作成します。
 ### 手動でサーバーを設定する
 サーバーを建てる場合、ブラウザからサーバーファイルをダウンロードせずとも、jsonファイルを次のように作成することで最新のビルドのサーバーファイルをダウンロードします。\
